@@ -12,16 +12,14 @@ public class Main {
 		//Conversión de Doméstico a Salvaje
 		System.out.println("De Doméstico a Salvaje");
 		FelinoDomestico gato = new FelinoDomestico("Garfield", (byte)45, 12f);
-		//definición de expresión lambda que define el convertidor de FelinoDomestico a FelinoSalvaje.
 		Converter<FelinoDomestico, FelinoSalvaje> converter = x -> new FelinoSalvaje(x.getNombre(), x.getEdad(), x.getPeso());
-		//se realiza la conversión
 		FelinoSalvaje felino1 = converter.convert(gato);
-		//mostramos los datos del objeto felino salvaje felino1
 		converter.mostrarObjeto(felino1);
 
 		//Conversión de Salvaje a Doméstico
 		FelinoSalvaje gato2 = new FelinoSalvaje("Tanner", (byte)20, 186f);
-		//FelinoSalvaje gato2 = null;
+		//FelinoSalvaje gato2 = null; Descomentar esta línea y comentar la de arriba para verificar que método el 
+		//estático de la interfaz, isNotNull() funciona correctamente
 		boolean IsNotNull = Converter.isNotNull(gato2);
 		if(IsNotNull == true) {
 			Converter<FelinoSalvaje, FelinoDomestico> converter2 = y -> new FelinoDomestico(y.getNombre(), y.getEdad(), y.getPeso());
