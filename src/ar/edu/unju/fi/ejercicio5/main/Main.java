@@ -20,7 +20,10 @@ public class Main {
 		int opcion = 0;
 		Boolean verificacion;
 		
-		cargaArray(scanner, productos); //Carga manual de los atributos de los 15 Productos
+		//IMPORTANTE: Dependiendo de la forma en la que quiera trabajar, puede comentar el tipo de carga del ArrayList de Productos
+		
+		//cargaArrayManual(scanner, productos); //Carga manual del Arrays de Productos
+		cargaArrayAutomatica(scanner, productos); //Carga automatica del Arrays de Productos
 		
 		do {
 			verificacion = false;
@@ -35,6 +38,8 @@ public class Main {
 			
 			switch(opcion) {
 			case 1:
+				System.out.println("");
+				System.out.println("LISTA DE PRODUCTOS");
 				for(Producto prod: productos) {
 					System.out.println(prod);
 				}
@@ -44,15 +49,19 @@ public class Main {
 			case 2:
 				ArrayList<Producto> compras = new ArrayList<>();
 				comprar(scanner, productos, compras);
-				System.out.println("Lista de compras");
-				
-				for(Producto prod : compras) {
-					System.out.println(prod);
+				System.out.println("");
+				if (compras.isEmpty()) {
+					System.out.println("El carrito de compras se encuentra vacío\n");
+				}else {
+					System.out.println("Listado de Compras");
+					for(Producto prod : compras) {
+						System.out.println(prod.getDescripcion()+" $"+prod.getPrecio());
+					}
+					System.out.println("");
+					int formaPago = opcionesPago(scanner);
+					Pagar(scanner, compras, formaPago);
+					scanner.nextLine();
 				}
-				scanner.nextLine();
-				int formaPago = opcionesPago(scanner);
-				Pagar(scanner, compras, formaPago);
-				scanner.nextLine();
 				break;
 				
 			case 3:
@@ -81,9 +90,9 @@ public class Main {
 		}
 	}
 	
-	public static void cargaArray(Scanner scanner, ArrayList<Producto> productos) {
+	public static void cargaArrayManual(Scanner scanner, ArrayList<Producto> productos) {
 		int numeroProducto = 1;
-		for(int i = 0; i < 3; i++) {
+		for(int i = 0; i < 15; i++) {
 			System.out.println("PRODUCTO N°"+numeroProducto);
 			Producto producto = new Producto();
 			producto = cargaProducto(scanner);
@@ -92,6 +101,39 @@ public class Main {
 			numeroProducto++;
 			System.out.println("");
 		}
+	}
+	
+	public static void cargaArrayAutomatica(Scanner scanner, ArrayList<Producto> productos) {
+		Producto producto1 = new Producto("0909", "Procesador Intel Core i5", 175000., OrigenFabricacion.CHINA, Categoria.INFORMATICA, true);
+		Producto producto2 = new Producto("5555", "Kit desarmador de Computadoras", 25000., OrigenFabricacion.URUGUAY, Categoria.HERRAMIENTAS, false);
+		Producto producto3 = new Producto("0012", "Impresora hp", 100500., OrigenFabricacion.ARGENTINA, Categoria.INFORMATICA, true);
+		Producto producto4 = new Producto("8901", "Heladera Panoramic", 500750., OrigenFabricacion.BRASIL, Categoria.ELECTROHOGAR, true);
+		Producto producto5 = new Producto("0001", "Licuadora Philips", 55000., OrigenFabricacion.BRASIL, Categoria.ELECTROHOGAR, true);
+		Producto producto6 = new Producto("9998", "Motorola G52", 450000., OrigenFabricacion.ARGENTINA, Categoria.TELEFONIA, false);
+		Producto producto7 = new Producto("1234", "Monitor Philips 22''", 160000., OrigenFabricacion.CHINA, Categoria.INFORMATICA, true);
+		Producto producto8 = new Producto("5000", "Teclado Constrictor", 13800., OrigenFabricacion.ARGENTINA, Categoria.INFORMATICA, true);
+		Producto producto9 = new Producto("6665", "Mouse Gaming NOGA", 8750., OrigenFabricacion.URUGUAY, Categoria.INFORMATICA, false);
+		Producto producto10 = new Producto("8888", "Auriculares Inalambricos", 7500., OrigenFabricacion.CHINA, Categoria.TELEFONIA, true);
+		Producto producto11 = new Producto("8987", "Gabinete Gamer", 90000., OrigenFabricacion.ARGENTINA, Categoria.INFORMATICA, true);
+		Producto producto12 = new Producto("2020", "Aire Acondicionado BGH", 350000., OrigenFabricacion.BRASIL, Categoria.ELECTROHOGAR, true);
+		Producto producto13 = new Producto("2024", "Iphone 15 Pro Max", 950000., OrigenFabricacion.ARGENTINA, Categoria.TELEFONIA, false);
+		Producto producto14 = new Producto("7537", "Pasta Termica MX-4", 8900., OrigenFabricacion.BRASIL, Categoria.HERRAMIENTAS, true);
+		Producto producto15 = new Producto("9639", "Coolers RGB", 7500., OrigenFabricacion.CHINA, Categoria.INFORMATICA, false);
+		productos.add(producto1);
+		productos.add(producto2);
+		productos.add(producto3);
+		productos.add(producto4);
+		productos.add(producto5);
+		productos.add(producto6);
+		productos.add(producto7);
+		productos.add(producto8);
+		productos.add(producto9);
+		productos.add(producto10);
+		productos.add(producto11);
+		productos.add(producto12);
+		productos.add(producto13);
+		productos.add(producto14);
+		productos.add(producto15);
 	}
 	
 	public static Producto cargaProducto(Scanner scanner) {
@@ -114,7 +156,6 @@ public class Main {
 				scanner.nextLine();
 			}
 		}
-		//if (verifPrecio == true)
 		producto.setPrecio(precio);
 		OrigenFabricacion eleccionOrigen = cargaOrigen(scanner);
 		producto.setOrigenFabricacion(eleccionOrigen);
@@ -156,14 +197,14 @@ public class Main {
 			            	eleccion = origen;
 			            }
 			        }
+				}else {
+					System.out.println("Seleccione una opción válida por favor");
 				}
 			}catch(Exception e) {
 				System.out.println("Error en el ingreso, vuelva a intentarlo");
 				scanner.nextLine();
 				
 			}
-			if (verif == false) 
-				System.out.println("Seleccione una opción válida por favor");
 			scanner.nextLine();
 		}
 		return eleccion;
@@ -191,13 +232,13 @@ public class Main {
 			            	eleccion = cat;
 			            }
 			        }
+				}else {
+					System.out.println("Seleccione una opción válida por favor");
 				}
 			}catch(Exception e) {
 				System.out.println("Error en el ingreso, vuelva a intentarlo");
 				scanner.nextLine();
 			}
-			if (verif == false) 
-				System.out.println("Seleccione una opción válida por favor");
 			scanner.nextLine();
 		}
 		return eleccion;
@@ -210,12 +251,11 @@ public class Main {
 			char respuesta = scanner.next().charAt(0);
 			if (respuesta == 's' || respuesta == 'S') {
 				if (productos.get(i).getEstado() == true) {
-					System.out.println("Añadido al carro de compras");
+					System.out.println("Añadido al carro de compras\n");
 					compras.add(productos.get(i));
 					scanner.nextLine();
 				}else {
-					System.out.println("Lo siento, este producto se encuentra fuera de stock");
-					scanner.nextLine();
+					System.out.println("Lo siento, este producto se encuentra fuera de stock\n");
 				}
 			}
 		}

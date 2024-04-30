@@ -6,6 +6,7 @@ import ar.edu.unju.fi.ejercicio5.interfaces.Pago;
 
 public class PagoTarjeta implements Pago {
 
+	public static final Double RECARGA = 0.15;
 	private String numeroTarjeta;
 	private LocalDate fechaPago;
 	private Double montoPagado;
@@ -22,13 +23,14 @@ public class PagoTarjeta implements Pago {
 
 	@Override
 	public void realizarPago(Double monto) {
-		Double recarga = monto * 0.15;
+		Double recarga = monto * RECARGA;
 		Double nuevoMonto = monto + recarga;
 		setMontoPagado(nuevoMonto);
 	}
 
 	@Override
 	public void imprimirRecibo() {
+		System.out.println("RECIBO");
 		System.out.println("Número de Tarjeta: "+this.numeroTarjeta);
 		System.out.println("Fecha de Pago: "+this.fechaPago);
 		System.out.println("Monto Pagado: $"+this.montoPagado);

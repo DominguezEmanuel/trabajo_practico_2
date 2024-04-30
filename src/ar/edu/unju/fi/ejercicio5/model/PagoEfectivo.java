@@ -6,6 +6,9 @@ import ar.edu.unju.fi.ejercicio5.interfaces.Pago;
 
 public class PagoEfectivo implements Pago{
 
+	public static final Double DESCUENTO = 0.10;
+	public static final Double RECARGA = 0.15;
+	
 	private Double montoPagado;
 	private LocalDate fechaPago;
 	
@@ -21,14 +24,14 @@ public class PagoEfectivo implements Pago{
 
 	@Override
 	public void realizarPago(Double monto) {
-		Double descuento = monto * 0.10;
+		Double descuento = monto * DESCUENTO;
 		Double nuevoMonto = monto - descuento;
 		setMontoPagado(nuevoMonto);
 	}
 
 	@Override
 	public void imprimirRecibo() {
-		
+		System.out.println("RECIBO");
 		System.out.println("Fecha de Pago: "+this.fechaPago);
 		System.out.println("Monto Pagado: $"+this.montoPagado);
 		
