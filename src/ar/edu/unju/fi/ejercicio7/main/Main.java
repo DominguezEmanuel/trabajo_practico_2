@@ -1,17 +1,22 @@
 package ar.edu.unju.fi.ejercicio7.main;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Scanner;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
-import ar.edu.unju.fi.ejercicio7.model.Producto;
-import ar.edu.unju.fi.ejercicio7.model.Producto.Categoria;
-import ar.edu.unju.fi.ejercicio7.model.Producto.OrigenFabricacion;
+import ar.edu.unju.fi.ejercicio7.until.Producto;
+import ar.edu.unju.fi.ejercicio7.until.Producto.Categoria;
+import ar.edu.unju.fi.ejercicio7.until.Producto.OrigenFabricacion;
 
 public class Main {
 
 	public static void main(String[] args) {
 		
-		ArrayList<Producto> productos = new ArrayList<>();
+		List<Producto> productos = new ArrayList<>();
 		Scanner scanner = new Scanner(System.in);
 
 		Boolean verificacion = false;
@@ -31,28 +36,39 @@ public class Main {
 			
 			switch(opcion) {
 			case 1:
-				
+				System.out.println("\nProductos Disponibles\n");
+				MostrarDisponibles(productos);
 				scanner.nextLine();
 				break;
 				
 			case 2:
-				
+				System.out.println("\nProductos NO Disponibles\n");
+				MostrarNoDisponibles(productos);
+				scanner.nextLine();
 				break;
 				
 			case 3:
-				
+				System.out.println("\nListado de nuevos precios\n");
+				incrementarPrecios(productos);
+				scanner.nextLine();
 				break;
 				
 			case 4:
-				
+				System.out.println("\nListado de productos de tipo ELECTROHOGAR\n");
+				MostrarProductosdeElectrohogar(productos);
+				scanner.nextLine();
 				break;
 				
 			case 5:
-				
+				System.out.println("\nLista de los Productos ordenados por precio\n");
+				ordenadorPorPrecio(productos);
+				scanner.nextLine();
 				break;
 				
 			case 6:
-				
+				System.out.println("\nLista de Productos con nombres en Mayúsculas");
+				MostrarNombresEnMayusculas(productos);
+				scanner.nextLine();
 				break;
 				
 			case 7:
@@ -64,7 +80,7 @@ public class Main {
 	}
 
 	
-	public static void cargaArrayAutomatica(Scanner scanner, ArrayList<Producto> productos) {
+	public static void cargaArrayAutomatica(Scanner scanner, List<Producto> productos) {
 		Producto producto1 = new Producto("0909", "Procesador Intel Core i5", 175000., OrigenFabricacion.CHINA, Categoria.INFORMATICA, true);
 		Producto producto2 = new Producto("5555", "Kit desarmador de Computadoras", 25000., OrigenFabricacion.URUGUAY, Categoria.HERRAMIENTAS, false);
 		Producto producto3 = new Producto("0012", "Impresora hp", 100500., OrigenFabricacion.ARGENTINA, Categoria.INFORMATICA, true);
@@ -76,7 +92,7 @@ public class Main {
 		Producto producto9 = new Producto("6665", "Mouse Gaming NOGA", 8750., OrigenFabricacion.URUGUAY, Categoria.INFORMATICA, false);
 		Producto producto10 = new Producto("8888", "Auriculares Inalambricos", 7500., OrigenFabricacion.CHINA, Categoria.TELEFONIA, true);
 		Producto producto11 = new Producto("8987", "Gabinete Gamer", 90000., OrigenFabricacion.ARGENTINA, Categoria.INFORMATICA, true);
-		Producto producto12 = new Producto("2020", "Aire Acondicionado BGH", 350000., OrigenFabricacion.BRASIL, Categoria.ELECTROHOGAR, true);
+		Producto producto12 = new Producto("2020", "Aire Acondicionado BGH", 350000., OrigenFabricacion.BRASIL, Categoria.ELECTROHOGAR, false);
 		Producto producto13 = new Producto("2024", "Iphone 15 Pro Max", 950000., OrigenFabricacion.ARGENTINA, Categoria.TELEFONIA, false);
 		Producto producto14 = new Producto("7537", "Pasta Termica MX-4", 8900., OrigenFabricacion.BRASIL, Categoria.HERRAMIENTAS, true);
 		Producto producto15 = new Producto("9639", "Coolers RGB", 7500., OrigenFabricacion.CHINA, Categoria.INFORMATICA, false);
@@ -119,5 +135,43 @@ public class Main {
 		}
 	}
 
+	public static void MostrarDisponibles(List<Producto> productos) {
+		Predicate<Producto> disponibles = p->p.getEstado();
+		productos.stream().filter(disponibles).forEach(System.out::println);
+	}
 	
+	public static void MostrarNoDisponibles(List<Producto> productos) {
+		Predicate<Producto> NoDisponibles = p->!p.getEstado();
+		productos.stream().filter(NoDisponibles).forEach(System.out::println);
+	}
+	
+	public static void incrementarPrecios(List<Producto> productos) {
+		Function<Producto, Producto> incremento = (p)->{
+				Double resultado = p.getPrecio()+(p.getPrecio()*0.20);
+				p.setPrecio(resultado);
+				return p;
+			};
+		List<Producto> productosIncrementados = new ArrayList<>();
+		productosIncrementados = productos.stream().map(incremento).collect(Collectors.toList());
+		productosIncrementados.forEach(System.out::println);
+	}
+	
+	public static void MostrarProductosdeElectrohogar(List<Producto> productos) {
+		Predicate<Producto> productosElectrohogar = p->p.getCategoria().name().equals("ELECTROHOGAR") && p.getEstado();
+		productos.stream().filter(productosElectrohogar).forEach(System.out::println);
+	}
+	
+	public static void ordenadorPorPrecio(List<Producto> productos) {
+		productos.sort(Comparator.comparing(Producto::getPrecio).reversed());
+		productos.forEach(p->System.out.println(p));
+	}
+	
+	public static void MostrarNombresEnMayusculas(List<Producto> productos) {
+		Function<Producto, Producto> pasarAmayusculas = (p)->{
+			String nombreEnMayusculas = p.getDescripcion().toUpperCase();
+			p.setDescripcion(nombreEnMayusculas);
+			return p;
+		};
+		productos.stream().map(pasarAmayusculas).forEach(System.out::println);
+	}
 }
